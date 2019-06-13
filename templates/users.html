@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+<form method="post">
+    <div class="form-group">
+        <label for="addUser">Пользователь</label>
+        <input type="text" class="form-control" id="addUser" placeholder="Пользователь" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Добавить</button>
+</form>
+{% endblock %}

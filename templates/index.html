@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+  <h1> {{ hello_text }} </h1>
+  <p>Главная страница админки SlackBot</p>
+{% endblock %}

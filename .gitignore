@@ -2,3 +2,6 @@ bot_slack_settings.json
 requirements.txt
 env
 database_test.json
+__pycache__
+.vscode
+webapp.db

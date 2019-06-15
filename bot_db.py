@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, timedelta
 from sqlalchemy import create_engine
 from sqlalchemy import Column, Integer, String, Date
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -20,7 +20,7 @@ class Users(Base):
     position_type = Column(Integer, unique=True)
     start_date = Column(Date)
     
-    def __init__(self, first_name=None, last_name=None, id_slack=None, position_type=None, start_date=None):
+    def __init__(self, first_name=None, last_name=None, slack_id=None, position_type=None, start_date=None):
         self.first_name = first_name
         self.last_name = last_name
         self.slack_id = slack_id

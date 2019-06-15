@@ -2,11 +2,6 @@ bot_slack_settings.json
 requirements.txt
 env
 database_test.json
-<<<<<<< HEAD
 database_test.py
-__pycache__
-=======
-__pycache__
 .vscode
 webapp.db
->>>>>>> ilya

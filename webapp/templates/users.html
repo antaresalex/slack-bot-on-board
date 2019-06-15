@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+<form method="post">
+    <div class="form-group">
+        <label for="firstName">Имя</label>
+        <input type="text" class="form-control" id="firstName" placeholder="Имя" required>
+        <label for="lastName">Фамилия</label>
+        <input type="text" class="form-control" id="lastName" placeholder="Фамилия" required>
+        <label for="slakId">Идентификатор Slack</label>
+        <input type="text" class="form-control" id="slakId" placeholder="Slack" required>
+        <label for="slakId">Позиция</label>
+        <select class="form-control" id="slakId" required>
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+        </select>
+        <label for="startDate">Дата начала работы</label>
+        <input type="date" class="form-control" id="startDate" value="2011-08-19" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Добавить</button>
+</form>
+{% endblock %}

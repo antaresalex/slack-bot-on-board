@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block title %}{{ what }}{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+  <p>
+    {% if what == 'Cтатья' %}
+    {{ what }} успешно добавлена
+    {% else %}
+    {{ what }} добавлен
+    {% endif %}
+  </p>
+{% endblock %}

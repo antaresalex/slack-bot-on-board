@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+<form method="post">
+    <div class="form-group">
+        <label for="eventText">Текст статьи</label>
+        <textarea class="form-control" id="eventText" rows="3" required></textarea>
+        <label for="interval">Интервал отправки статьи</label>
+        <input class="form-control" type="number" id="interval" value="42" required>
+        <label>Для кого статья</label>
+        <input class="form-control" type="checkbox" id="1"> 1
+        <input class="form-control" type="checkbox" id="2"> 2
+        <input class="form-control" type="checkbox" id="3"> 3
+    </div>
+    <button type="submit" class="btn btn-primary">Добавить</button>
+</form>
+{% endblock %}

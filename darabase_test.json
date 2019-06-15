@@ -1,0 +1,28 @@
+{
+    "ID Sch 1": 
+    {
+    "User ID": "UJVLRJ9P0",
+    "User name": "Саша",
+    "Message": "La la la",
+    "Date": "08/06/2019",
+    "Sending status": "No"
+    },
+    
+    "ID Sch 2": 
+    {
+    "User ID": "UJV0800CA",
+    "User name": "Илья",
+    "Message": "Илья, привет",
+    "Date": "09/06/2019",
+    "Sending status": "No"
+    },
+
+    "ID Sch 3":
+    {
+    "User ID": "UK6B1HJ5B",
+    "User name": "Миша",
+    "Message": "Миша, привет",
+    "Date": "09/06/2019",
+    "Sending status": "No"
+    }
+}

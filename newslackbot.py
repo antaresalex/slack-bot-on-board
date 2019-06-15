@@ -2,17 +2,7 @@ import json
 import slack
 import schedule
 import time
-from sqlalchemy import create_engine
-from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import scored_session, sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
 
-engine = create_engine('sqlite://schedule.sqlite')
-
-db_session = scored_session(sessionmaker(bing=engine))
-
-Base = declarative_base()
-Base.query = db_session.query_property()
 
 def bot_token():
     with open('bot_slack_settings.json', 'r') as f_bot_token:

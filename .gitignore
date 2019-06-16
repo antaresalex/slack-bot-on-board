@@ -5,3 +5,5 @@ database_test.json
 database_test.py
 .vscode
 webapp.db
+__pycache__
+webapp/__pycache__

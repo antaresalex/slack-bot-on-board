@@ -8,7 +8,7 @@ class User(db.Model):
     first_name = db.Column(db.String, nullable=False)
     last_name = db.Column(db.String, nullable=False)
     slack_id = db.Column(db.String, nullable=False, unique=True)
-    position_type = db.Column(db.String, nullable=False) # FK Как сделать?
+    position_type = db.Column(db.Integer, nullable=False)
     start_date = db.Column(db.DateTime, nullable=False)
 
     def __repr__(self):
@@ -50,6 +50,4 @@ class Schedule(db.Model):
 
     def __repr__(self):
         return '<Schedule {} {} {}>'.format(self.user_id, self.delivery_date, self.delivery_status)
-
-
-    
+   

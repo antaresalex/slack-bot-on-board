@@ -1,20 +1,64 @@
 {% extends "layout.html" %}
 {% block title %}{{ title }}{% endblock %}
-{% block head %}
-  {{ super() }}
-{% endblock %}
 {% block content %}
-<form method="post">
-    <div class="form-group">
-        <label for="eventText">Текст статьи</label>
-        <textarea class="form-control" id="eventText" rows="3" required></textarea>
-        <label for="interval">Интервал отправки статьи</label>
-        <input class="form-control" type="number" id="interval" value="42" required>
-        <label>Для кого статья</label>
-        <input class="form-control" type="checkbox" id="1"> 1
-        <input class="form-control" type="checkbox" id="2"> 2
-        <input class="form-control" type="checkbox" id="3"> 3
-    </div>
-    <button type="submit" class="btn btn-primary">Добавить</button>
-</form>
+<dev class="row">
+    <form method="post">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.event_name.label }}<br>
+            {{ form.event_name }}
+            {% if form.event_name.errors %}
+            <ul class=errors>
+                {% for error in form.event_name.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        <div class="form-group">
+            {{ form.text.label }}<br>
+            {{ form.text }}
+            {% if form.text.errors %}
+            <ul class=errors>
+                {% for error in form.text.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        <div class="form-group">
+            {{ form.interval.label }}<br>
+            {{ form.interval }}
+            {% if form.interval.errors %}
+            <ul class=errors>
+                {% for error in form.interval.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        <div class="form-group">
+            {{ form.position_type.label }}<br>
+            {{ form.position_type }}
+            {% if form.position_type.errors %}
+            <ul class=errors>
+                {% for error in form.position_type.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        {{ form.submit }}
+    </form>
+</dev>
+<h3>Статьи</h3>
+{% if events_list %}
+<ul class="list-inline">
+    {% for event in events_list %}
+    <li>{{ event.event_name }}</li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>Статей не найдено</p>
+{% endif %}
 {% endblock %}

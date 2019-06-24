@@ -1,6 +1,7 @@
+from datetime import date, timedelta
 from flask import Flask, render_template, url_for, redirect, request, flash
 from webapp.form import UserForm, EventForm
-from webapp.model import db, Event, User, Position_type
+from webapp.model import db, Event, User, Position_type, Schedule
 
 def create_app():
     app = Flask(__name__)
@@ -57,6 +58,18 @@ def create_app():
                             start_date=start_date, 
                             position_type=position_type)
             db.session.add(new_user)
+            db.session.commit()
+
+            print(type(start_date))
+            schedule_to_insert = []
+            events = Event.query.filter(Event.positions.any(id=user_form.position_type.data)).all()
+            print(events)
+            for event in events:
+                interval = timedelta(days=event.interval)
+                delivery_date = start_date + interval
+                schedule_to_insert.append(Schedule(user_id=new_user.id, event_id=event.id, delivery_date=delivery_date))
+                
+            db.session.bulk_save_objects(schedule_to_insert)
             db.session.commit()
             flash('Пользователь успешно добавлен.')
             return redirect(url_for('users'))

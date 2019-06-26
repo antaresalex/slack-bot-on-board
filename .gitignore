@@ -7,3 +7,5 @@ database_test.py
 webapp.db
 __pycache__
 webapp/__pycache__
+webapp/config.py
+bot_db.sqlite

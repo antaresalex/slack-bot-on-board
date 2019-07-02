@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <form method="post">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ form.first_name.label }}<br>
+                {{ form.first_name() }}
+            </div>
+            <div class="form-group">
+                {{ form.last_name.label }}<br>
+                {{ form.last_name() }}
+            </div>
+            <div class="form-group">
+                {{ form.slack_id.label }}<br>
+                {{ form.slack_id() }}
+            </div>
+            <div class="form-group">
+                {{ form.position_type.label }}<br>
+                {{ form.position_type() }}
+            </div>
+            <div class="form-group">
+                {{ form.start_date.label }}<br>
+                {{ form.start_date() }}
+            </div>
+            {{ form.submit }}
+        </form>
+    </div>
+    <div class="row">
+        <div class="col-4">
+            <h3>Пользователи</h3>
+            {% if users_list %}
+            <ul class="list-inline">
+                {% for user in users_list %}
+                <li>
+                    <a href="{{ url_for('user.edit_user', user_id=user.id) }}">{{ user.first_name }} {{ user.last_name }}</a> дата начала: {{ user.start_date }}
+                    <button type="button" class="close" onclick="delete_user({{ user.id }});" aria-label="Close">&times;</button>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>Пользователей не найдено</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<script>
+function delete_user(index) {
+    $.post("/users/delete_user/" + index, function (data, status) {
+        alert(data);
+        location.reload();
+    });
+}
+</script>
+{% endblock %}

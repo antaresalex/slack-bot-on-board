@@ -54,7 +54,7 @@ def users():
 
 @blueprint.route('/<int:user_id>', methods=['GET', 'POST'])
 def edit_user(user_id):
-    user = User.query.get(user_id)
+    user = User.query.get_or_404(user_id)
     title = 'Пользователь: {firstname} {lastname}'.format(
         firstname=user.first_name, lastname=user.last_name)
     form = UserForm(obj=user)
@@ -62,9 +62,7 @@ def edit_user(user_id):
         (user.position.id, user.position.position_name)]
 
     if form.validate_on_submit():
-        user.first_name = form.first_name.data
-        user.last_name = form.last_name.data
-        user.slack_id = form.slack_id.data
+        form.populate_obj(user)
         db.session.commit()
         flash('Пользователь {firstname} {lastname} успешно обнавлен.'.format(
             firstname=user.first_name, lastname=user.last_name))
@@ -78,11 +76,7 @@ def edit_user(user_id):
 
 @blueprint.route('/delete_user/<int:user_id>', methods=['POST'])
 def delete_user(user_id):
-    user = User.query.get(user_id)
-
-    if request.method == 'POST':
-        db.session.delete(user)
-        db.session.commit()
-        return 'Пользователь успешно удален!'
-    else:
-        return 'Error'
+    user = User.query.get_or_404(user_id)
+    db.session.delete(user)
+    db.session.commit()
+    return 'Пользователь успешно удален!'

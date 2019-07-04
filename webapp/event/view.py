@@ -38,15 +38,14 @@ def events():
 
 @blueprint.route('/<int:event_id>', methods=['GET', 'POST'])
 def edit_event(event_id):
-    event = Event.query.get(event_id)
+    event = Event.query.get_or_404(event_id)
     title = 'Статья: {}'.format(event.event_name)
     form = EventForm(obj=event)
     form.position_type.choices = [
         (p.id, p.position_name) for p in event.positions]
 
     if form.validate_on_submit():
-        event.event_name = form.event_name.data
-        event.text = form.text.data
+        form.populate_obj(event)
         db.session.commit()
         flash('{} сохранена'.format(event.event_name))
         return redirect(url_for('event.events'))
@@ -55,3 +54,11 @@ def edit_event(event_id):
                            title=title,
                            event=event,
                            form=form)
+
+
+@blueprint.route('/delete_event/<int:event_id>', methods=['POST'])
+def delete_user(event_id):
+    event = Event.query.get_or_404(event_id)
+    db.session.delete(event)
+    db.session.commit()
+    return 'Статья успешно удалена!'

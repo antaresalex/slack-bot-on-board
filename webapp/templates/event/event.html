@@ -1,70 +1,85 @@
 {% extends "layout.html" %}
 {% block title %}{{ title }}{% endblock %}
 {% block content %}
-<div class="row">
-    <form action="" method="post">
-        {{ form.hidden_tag() }}
-        <div class="form-group">
-            {{ form.event_name.label }}<br>
-            {{ form.event_name }}
-            {% if form.event_name.errors %}
-            <ul class="errors">
-                {% for error in form.event_name.errors %}
-                <li>{{ error }}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-        </div>
-        <div class="form-group">
-            {{ form.text.label }}<br>
-            {{ form.text }}
-            {% if form.text.errors %}
-            <ul class="errors">
-                {% for error in form.text.errors %}
-                <li>{{ error }}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-        </div>
-        <div class="form-group">
-            {{ form.interval.label }}<br>
-            {{ form.interval }}
-            {% if form.interval.errors %}
-            <ul class="errors">
-                {% for error in form.interval.errors %}
-                <li>{{ error }}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-        </div>
-        <div class="form-group">
-            {% for position in form.position_type %}
-            <div class="form-check">
-                {{ position() }}
-                {{ position.label }}
+<div class="container">
+    <div class="row">
+        <form action="" method="post">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ form.event_name.label }}<br>
+                {{ form.event_name }}
+                {% if form.event_name.errors %}
+                <ul class="errors">
+                    {% for error in form.event_name.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
             </div>
-            {% endfor %}
-            {% if form.position_type.errors %}
-            <ul class="errors">
-                {% for error in form.position_type.errors %}
-                <li>{{ error }}</li>
+            <div class="form-group">
+                {{ form.text.label }}<br>
+                {{ form.text }}
+                {% if form.text.errors %}
+                <ul class="errors">
+                    {% for error in form.text.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.interval.label }}<br>
+                {{ form.interval }}
+                {% if form.interval.errors %}
+                <ul class="errors">
+                    {% for error in form.interval.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {% for position in form.position_type %}
+                <div class="form-check">
+                    {{ position() }}
+                    {{ position.label }}
+                </div>
+                {% endfor %}
+                {% if form.position_type.errors %}
+                <ul class="errors">
+                    {% for error in form.position_type.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            {{ form.submit }}
+        </form>
+    </div>
+    <div class="raw">
+        <div class="col-4">
+            <h3>Статьи</h3>
+            {% if events_list %}
+            <ul class="list-inline">
+                {% for event in events_list %}
+                <li>
+                    <a href="{{ url_for('event.edit_event', event_id = event.id) }}">{{ event.event_name }}</a> {{ event.interval }}
+                    <button type="button" class="close" onclick="delete_event({{ event.id }});" aria-label="Close">&times;</button>
+                </li>
                 {% endfor %}
             </ul>
+            {% else %}
+            <p>Статей не найдено</p>
             {% endif %}
         </div>
-        {{ form.submit }}
-    </form>
+    </div>
 </div>
-<h3>Статьи</h3>
-{% if events_list %}
-<ul class="list-inline">
-    {% for event in events_list %}
-    <li>
-        <a href="{{ url_for('event.edit_event', event_id = event.id) }}">{{ event.event_name }}</a> {{ event.interval }} 
-    </li>
-    {% endfor %}
-</ul>
-{% else %}
-<p>Статей не найдено</p>
-{% endif %}
+<script>
+function delete_event(index) {
+    $.post("/events/delete_event/" + index, function (data) {
+        alert(data);
+        location.reload();
+    });
+}
+</script>
 {% endblock %}

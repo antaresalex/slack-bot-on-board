@@ -48,7 +48,7 @@
 </div>
 <script>
 function delete_user(index) {
-    $.post("/users/delete_user/" + index, function (data, status) {
+    $.post("/users/delete_user/" + index, function (data) {
         alert(data);
         location.reload();
     });

@@ -17,7 +17,7 @@ class UserForm(FlaskForm):
                                 choices=[],
                                 coerce=int,
                                 render_kw={"class": "form-control"})
-    start_date = DateField('Дата начала работы',
+    start_date = DateField('Дата начала работы xx.xx.xxxx',
                            format='%d.%m.%Y',
                            validators=[DataRequired()],
                            render_kw={"class": "form-control"})

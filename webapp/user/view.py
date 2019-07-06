@@ -16,6 +16,7 @@ def users():
     users_list = User.query.all()
 
     if user_form.validate_on_submit():
+        print(1)
         first_name = user_form.first_name.data
         last_name = user_form.last_name.data
         slack_id = user_form.slack_id.data
@@ -41,6 +42,7 @@ def users():
             schedule_to_insert.append(Schedule(user=new_user,
                                                event_id=event.id,
                                                delivery_date=delivery_date))
+        print(schedule_to_insert)
         db.session.add_all(schedule_to_insert)
         db.session.commit()
         flash('Пользователь успешно добавлен.')

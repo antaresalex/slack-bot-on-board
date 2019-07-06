@@ -7,3 +7,6 @@ database_test.py
 webapp.db
 __pycache__
 webapp/__pycache__
+bot_db.sqlite
+add_event.py
+add_position.py

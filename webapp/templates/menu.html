@@ -1,0 +1,15 @@
+{% set nav_links = [
+    ('/', 'index', 'Главная'),
+    ('/users', 'users', 'Пользователи'),
+    ('/events', 'event', 'Статьи')
+] %}
+
+{% set active_page = active_page|default('index') %}
+
+<ul class="nav flex-column">
+    {% for href, id, caption in nav_links %}
+    <li class='nav-item {% if id == active_page %}active{% endif %}'>
+        <a class="nav-link" href="{{ href }}">{{ caption }}</a>
+    </li>
+    {% endfor %}
+</ul>

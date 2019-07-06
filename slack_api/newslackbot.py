@@ -39,6 +39,9 @@ def send_message():
         response = client.chat_postMessage(
             channel=user.slack_id,
             text=event.text)
+        schedule.delivery_status='Отправлено'
+        db.session.add(schedule)
+    db.session.commit()
     #отметить статус Отправлено в БД в расписании после каждой отправки
 
 

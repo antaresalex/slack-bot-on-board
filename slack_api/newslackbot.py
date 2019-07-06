@@ -2,7 +2,9 @@ import json
 import slack
 import schedule
 import time
-
+from datetime import datetime
+from webapp import create_app
+from webapp.model import db, User, Event, Position_type, Schedule
 
 def bot_token():
     with open('bot_slack_settings.json', 'r') as f_bot_token:
@@ -14,19 +16,48 @@ def proxy_login_data():
         proxy_login = json.loads(f_proxy_login.read())["bot_proxy"]["http"]
         return proxy_login
 
+
+# Одна функция - джойн нескольких таблиц (все данные для отправки сегодня)
+# Вторая функция в цикле отправляет сообщения и отмечает в базе статус отправлено
+
+
 def database():
-    with open('database_test.json', 'r') as f_ID_Sch:
-        list_ID_Sch = []
-        dict_ID_Sch = json.loads(f_ID_Sch.read())
-        for ID_Sch in dict_ID_Sch.values():
-            user_ID = ID_Sch["User ID"]
-            user_message = ID_Sch["Message"]
-            list_ID_Sch_user = []
-            list_ID_Sch_user.append(user_ID)
-            list_ID_Sch_user.append(user_message)
-            list_ID_Sch.append(list_ID_Sch_user)
-        print(list_ID_Sch)
-        return list_ID_Sch
+    db.session.query(User.slack_id.\
+    join(Account, Account.organization == User.organization).\
+    filter(Schedule.delivery_status == None)
+    #http://qaru.site/questions/15782122/how-to-join-data-from-two-tables-in-sqlalchemy
+    
+    # with open('database_test.json', 'r') as f_ID_Sch:
+    #     list_ID_Sch = []
+    #     dict_ID_Sch = json.loads(f_ID_Sch.read())
+    #     for ID_Sch in dict_ID_Sch.values():
+    #         user_ID = ID_Sch["User ID"]
+    #         user_message = ID_Sch["Message"]
+    #         list_ID_Sch_user = []
+    #         list_ID_Sch_user.append(user_ID)
+    #         list_ID_Sch_user.append(user_message)
+    #         list_ID_Sch.append(list_ID_Sch_user)
+    #     print(list_ID_Sch)
+    #     return list_ID_Sch
+
+    #     app = create_app()
+    #     with app.app_context():
+    #         get_user_db()
+
+
+#def database():
+#    with open('database_test.json', 'r') as f_ID_Sch:
+#        list_ID_Sch = []
+#        dict_ID_Sch = json.loads(f_ID_Sch.read())
+#        for ID_Sch in dict_ID_Sch.values():
+#            user_ID = ID_Sch["User ID"]
+#            user_message = ID_Sch["Message"]
+#            list_ID_Sch_user = []
+#            list_ID_Sch_user.append(user_ID)
+#            list_ID_Sch_user.append(user_message)
+#            list_ID_Sch.append(list_ID_Sch_user)
+#        print(list_ID_Sch)
+#        return list_ID_Sch
 
 # def message():
 #     with open('database_test.json', 'r') as f_bot_message:

@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, url_for, redirect, flash
+from webapp.html_to_slack import convert_to_slack_md
 
 from webapp.event.form import EventForm
 from webapp.model import db, Event, Position_type
@@ -16,12 +17,14 @@ def events():
 
     if event_form.validate_on_submit():
         event_name = event_form.event_name.data
-        text = event_form.text.data
+        html_text = event_form.html_text.data
         interval = event_form.interval.data
         positions = Position_type.query.filter(Position_type.id.in_(
             event_form.position_type.data)).all()
+        text = convert_to_slack_md(html_text)
 
         new_event = Event(event_name=event_name,
+                          html_text=html_text,
                           text=text,
                           interval=interval,
                           positions=positions)

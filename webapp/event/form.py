@@ -14,8 +14,10 @@ class EventForm(FlaskForm):
     event_name = StringField('Название статьи',
                              validators=[DataRequired()],
                              render_kw={"class": "form-control"})
-    text = TextAreaField('Текст статьи',
-                         validators=[DataRequired()],
+    html_text = TextAreaField('Текст статьи',
+                              validators=[DataRequired()],
+                              render_kw={"class": "form-control summernote"})
+    text = TextAreaField('Текст для Slack',
                          render_kw={"class": "form-control"})
     interval = IntegerField('Интервал отправки',
                             validators=[InputRequired()],

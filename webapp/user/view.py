@@ -60,6 +60,7 @@ def edit_user(user_id):
     form = UserForm(obj=user)
     form.position_type.choices = [
         (user.position.id, user.position.position_name)]
+    schedule = Schedule.query.options(db.joinedload(Schedule.event)).filter_by(user_id=user_id).all()
 
     if form.validate_on_submit():
         form.populate_obj(user)
@@ -71,6 +72,7 @@ def edit_user(user_id):
     return render_template('user/edit_user.html',
                            title=title,
                            user=user,
+                           schedule=schedule,
                            form=form)
 
 

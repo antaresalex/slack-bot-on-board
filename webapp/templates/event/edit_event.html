@@ -3,30 +3,35 @@
 {% block content %}
 <h1> {{ title }} </h1>
 <div class="row">
-    <form action="" method="post">
-        {{ form.hidden_tag() }}
-        <div class="form-group">
-            {{ form.event_name.label }}<br>
-            {{ form.event_name }}
+        <div class="col-4">
+            <form action="" method="post">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.event_name.label }}<br>
+                    {{ form.event_name }}
+                </div>
+                <div class="form-group">
+                    {{ form.text.label }}<br>
+                    {{ form.text }}
+                </div>
+                <div class="form-group">
+                    {{ form.interval.label }}<br>
+                    {{ form.interval(readonly=True) }}
+                </div>
+                <div class="form-group">
+                    {% for position in form.position_type %}
+                    <div class="form-check">
+                        {{ position(checked=True, disabled=True) }}
+                        {{ position.label }}
+                    </div>
+                    {% endfor %}
+                </div>
+                {{ form.submit(value='Сохранить') }}
+            </form>
         </div>
-        <div class="form-group">
-            {{ form.text.label }}<br>
-            {{ form.text }}
-        </div>
-        <div class="form-group">
-            {{ form.interval.label }}<br>
-            {{ form.interval(readonly=True) }}
-        </div>
-        <div class="form-group">
-            {% for position in form.position_type %}
-            <div class="form-check">
-                {{ position(checked=True, disabled=True) }}
-                {{ position.label }}
-            </div>
-            {% endfor %}
-        </div>
-        {{ form.submit(value='Сохранить') }}
-    </form>
+</div>
+<div class="row">
+    {{ parser }}
 </div>
 {% if form.errors %}
 <ul class="errors">
@@ -35,4 +40,18 @@
     {% endfor %}
 </ul>
 {% endif %}
+{% endblock %}
+{% block script %}
+<script>
+$(document).ready(function() {
+    $('.summernote').summernote({
+        toolbar: [
+            ['font', ['bold', 'italic', 'strikethrough', 'clear']],
+            ['insert', ['link']],
+            ['para', ['ul']],
+            ['view', ['codeview']]
+        ],
+    });
+});
+</script>
 {% endblock %}

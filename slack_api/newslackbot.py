@@ -16,10 +16,7 @@ def proxy_login_data():
         proxy_login = json.loads(f_proxy_login.read())["bot_proxy"]["http"]
         return proxy_login
 
-
 # Одна функция - джойн нескольких таблиц (все данные для отправки сегодня)
-# Вторая функция в цикле отправляет сообщения и отмечает в базе статус отправлено
-
 def get_from_database():
     schedule_from_base = (db.session.query(Schedule, User, Event)
     .join(User)
@@ -29,7 +26,7 @@ def get_from_database():
     .all())
     return schedule_from_base
 
-#список с кортежем// в цикле итерирусь по списку для sch, user, event
+#Вторая функция в цикле отправляет сообщения и отмечает в базе статус отправлено
 def send_message():
     schedule_from_base = get_from_database()
     for schedule, user, event in schedule_from_base:
@@ -42,86 +39,22 @@ def send_message():
         schedule.delivery_status='Отправлено'
         db.session.add(schedule)
     db.session.commit()
-    #отметить статус Отправлено в БД в расписании после каждой отправки
 
+#проверка базы каждый день на наличие неотравленных материалов
+def bot_job():
+    print("I'm in bot_job...")
+    schedule.every().monday.at("11:00").do(send_message)
+    schedule.every().tuesday.at("11:00").do(send_message)
+    schedule.every().wednesday.at("11:00").do(send_message)
+    schedule.every().thursday.at("11:00").do(send_message)
+    schedule.every().friday.at("11:00").do(send_message)
+    while True:
+        schedule.run_pending()
+        time.sleep(60)
 
-# def hello_bot():
-#     list_ID_Sch = database()
-#     for user_id, message in list_ID_Sch:
-#         client = slack.WebClient(
-#             token=bot_token(),
-#             proxy=proxy_login_data())
-#         response = client.chat_postMessage(
-#             channel=user_id,
-#             text=message)
-
-    
-    # with open('database_test.json', 'r') as f_ID_Sch:
-    #     list_ID_Sch = []
-    #     dict_ID_Sch = json.loads(f_ID_Sch.read())
-    #     for ID_Sch in dict_ID_Sch.values():
-    #         user_ID = ID_Sch["User ID"]
-    #         user_message = ID_Sch["Message"]
-    #         list_ID_Sch_user = []
-    #         list_ID_Sch_user.append(user_ID)
-    #         list_ID_Sch_user.append(user_message)
-    #         list_ID_Sch.append(list_ID_Sch_user)
-    #     print(list_ID_Sch)
-    #     return list_ID_Sch
-
-    #     app = create_app()
-    #     with app.app_context():
-    #         get_user_db()
-
-
-#def database():
-#    with open('database_test.json', 'r') as f_ID_Sch:
-#        list_ID_Sch = []
-#        dict_ID_Sch = json.loads(f_ID_Sch.read())
-#        for ID_Sch in dict_ID_Sch.values():
-#            user_ID = ID_Sch["User ID"]
-#            user_message = ID_Sch["Message"]
-#            list_ID_Sch_user = []
-#            list_ID_Sch_user.append(user_ID)
-#            list_ID_Sch_user.append(user_message)
-#            list_ID_Sch.append(list_ID_Sch_user)
-#        print(list_ID_Sch)
-#        return list_ID_Sch
-
-# def message():
-#     with open('database_test.json', 'r') as f_bot_message:
-#         bot_message = json.loads(f_bot_message.read())["bot_message"]
-#         return bot_message
-
-# def get_user_ID():
-#     with open('database_test.json', 'r') as f_user_ID:
-#         user_ID = json.loads(f_user_ID.read())["ID Sch 1"]["User ID"]
-#         return user_ID
-
-# def hello_bot():
-#     list_ID_Sch = database()
-#     for user_id, message in list_ID_Sch:
-#         client = slack.WebClient(
-#             token=bot_token(),
-#             proxy=proxy_login_data())
-#         response = client.chat_postMessage(
-#             channel=user_id,
-#             text=message)
-
-# def bot_job():
-#     print("I'm in bot_job...")
-#     schedule.every().minute.do(hello_bot)
-#     #schedule.every().day.at("11:00").do(hello_bot)
-
-#     while True:
-#         schedule.run_pending()
-#         time.sleep(60)
-
-# if __name__ == '__main__':
-#     bot_job()
-
-app = create_app()
-with app.app_context():
-    send_message()
+if __name__ == '__main__':
+    app = create_app()
+    with app.app_context():
+        bot_job()
 
 

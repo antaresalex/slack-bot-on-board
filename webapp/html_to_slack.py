@@ -2,7 +2,7 @@ from html.parser import HTMLParser
 from pyquery import PyQuery as pq
 from re import sub
 
-__all__ = ['convert']
+__all__ = ['HTMLToSlackMD']
 
 # HTML tag for convert to SlackMD
 MRKDWN = {'b': ('*', '*'),
@@ -32,11 +32,9 @@ class HTMLToSlackMD(HTMLParser):
     def handle_endtag(self, tag):
         if tag in MRKDWN:
             self._slack_md = self._slack_md + MRKDWN[tag][1]
-        if self._tag_stack[0] == tag:
-            self._tag_stack.pop()
+        self._tag_stack.pop()
+        if len(self._tag_stack) == 0:
             self._slack_md = self._slack_md + '\\n'
-        else:
-            self._tag_stack.pop()
 
     def _clear_mrk(self, html):
         doc = pq(html)
@@ -44,16 +42,12 @@ class HTMLToSlackMD(HTMLParser):
             for el in doc.items(tag_el):
                 if not pq(el).text():
                     el.remove()
-                    html = doc.html()
 
+        html = doc.html()
         return sub(' +', ' ', html)
 
     def convert(self, html=''):
-        self.html = self._clear_mrk(html)
-        self.feed(self.html)
+        html = self._clear_mrk(html)
+        self.feed(html)
         print(self._slack_md)
         return self._slack_md
-
-
-_inst = HTMLToSlackMD()
-convert = _inst.convert

@@ -9,7 +9,7 @@ MRKDWN = {'b': ('*', '*'),
           'i': ('_', '_'),
           'strike': ('~', '~'),
           'a': ('<', '>'),
-          'li': ('• ', '\\n')}
+          'li': ('• ', '\n')}
 
 
 class HTMLToSlackMD(HTMLParser):
@@ -34,7 +34,7 @@ class HTMLToSlackMD(HTMLParser):
             self._slack_md = self._slack_md + MRKDWN[tag][1]
         self._tag_stack.pop()
         if len(self._tag_stack) == 0:
-            self._slack_md = self._slack_md + '\\n'
+            self._slack_md = self._slack_md + '\n'
 
     def _clear_mrk(self, html):
         doc = pq(html)

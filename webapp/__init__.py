@@ -1,4 +1,5 @@
 from flask import Flask, render_template
+from flask_migrate import Migrate
 
 from webapp.model import db
 from webapp.user.view import blueprint as user_blueprint
@@ -9,6 +10,8 @@ def create_app():
     app = Flask(__name__)
     app.config.from_pyfile('config.py')
     db.init_app(app)
+    migrate = Migrate(app, db)
+
     app.register_blueprint(user_blueprint)
     app.register_blueprint(event_blueprint)
 

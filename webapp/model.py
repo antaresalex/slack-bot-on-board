@@ -1,10 +1,12 @@
+from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
 
 
-class User(db.Model):
-    __tablename__ = 'user'
+class Employee(db.Model):
+    __tablename__ = 'employee'
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String, nullable=False)
     last_name = db.Column(db.String, nullable=False)
@@ -15,14 +17,14 @@ class User(db.Model):
     start_date = db.Column(db.Date, nullable=False)
 
     # Связь с таблицей position_type.
-    # Позволяет вызвать всех пользователей должности Position_type.users
+    # Позволяет вызвать всех пользователей должности Position_type.employees
     position = db.relationship('Position_type',
-                               backref=db.backref('users', lazy='dynamic'))
+                               backref=db.backref('employees', lazy='dynamic'))
 
     def __repr__(self):
-        return '<User {} {} {}>'.format(self.first_name,
-                                        self.last_name,
-                                        self.start_date)
+        return '<Employee {} {} {}>'.format(self.first_name,
+                                            self.last_name,
+                                            self.start_date)
 
 
 # Дополнительная таблица для связи event и position_type
@@ -64,17 +66,17 @@ class Position_type(db.Model):
 class Schedule(db.Model):
     __tablename__ = 'schedule'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    employee_id = db.Column(db.Integer, db.ForeignKey('employee.id'), nullable=False)
     event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
     delivery_date = db.Column(db.DateTime, nullable=False)
     delivery_status = db.Column(db.String, nullable=True)
 
-    # Связь с таблицей user. Позволяет вызвать все расписание для пользователя
-    # User.shedules
-    user = db.relationship('User',
-                           backref=db.backref('schedules',
-                                              cascade="all, delete-orphan",
-                                              lazy='dynamic'))
+    # Связь с таблицей Employee. Позволяет вызвать все расписание для пользователя
+    # Employee.shedules
+    employee = db.relationship('Employee',
+                               backref=db.backref('schedules',
+                                                  cascade="all, delete-orphan",
+                                                  lazy='dynamic'))
 
     # Связь с таблицей event. Позволяет вызвать все расписания
     # связанные с событием Event.shedules
@@ -84,6 +86,40 @@ class Schedule(db.Model):
                                                lazy='dynamic'))
 
     def __repr__(self):
-        return '<Schedule {} {} {}>'.format(self.user_id,
+        return '<Schedule {} {} {}>'.format(self.employee_id,
                                             self.delivery_date,
                                             self.delivery_status)
+
+
+class User(db.Model, UserMixin):
+    __tablename__ = 'user'
+    id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String, nullable=False)
+    last_name = db.Column(db.String, nullable=False)
+    username = db.Column(db.String(50), nullable=False)
+    password = db.Column(db.String(128))
+    role = db.Column(db.Integer,
+                     db.ForeignKey('role.id'),
+                     nullable=False)
+
+    role_type = db.relationship('Role',
+                                backref=db.backref('users', lazy='dynamic'))
+
+    def set_password(self, password):
+        self.password = generate_password_hash(password)
+
+    def chek_password(self, password):
+        return check_password_hash(self.password, password)
+
+    def __repr__(self):
+        return '<User {} {}>'.format(self.first_name,
+                                     self.username)
+
+
+class Role(db.Model):
+    __tablename__ = 'role'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False, unique=True)
+
+    def __repr__(self):
+        return '<User role {}>'.format(self.name)

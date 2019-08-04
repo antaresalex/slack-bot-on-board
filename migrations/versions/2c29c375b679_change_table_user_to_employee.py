@@ -1,8 +1,8 @@
-"""slack bot tabeles
+"""Change table User to Employee
 
-Revision ID: 57505d03d99a
+Revision ID: 2c29c375b679
 Revises: 
-Create Date: 2019-07-24 23:11:26.242323
+Create Date: 2019-08-04 12:04:06.079966
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '57505d03d99a'
+revision = '2c29c375b679'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -32,13 +32,13 @@ def upgrade():
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('position_name')
     )
-    op.create_table('position_event',
-    sa.Column('position_type', sa.Integer(), nullable=True),
-    sa.Column('event', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['event'], ['event.id'], ),
-    sa.ForeignKeyConstraint(['position_type'], ['position_type.id'], )
+    op.create_table('role',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('name', sa.String(), nullable=False),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('name')
     )
-    op.create_table('user',
+    op.create_table('employee',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('first_name', sa.String(), nullable=False),
     sa.Column('last_name', sa.String(), nullable=False),
@@ -49,14 +49,30 @@ def upgrade():
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('slack_id')
     )
+    op.create_table('position_event',
+    sa.Column('position_type', sa.Integer(), nullable=True),
+    sa.Column('event', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['event'], ['event.id'], ),
+    sa.ForeignKeyConstraint(['position_type'], ['position_type.id'], )
+    )
+    op.create_table('user',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('first_name', sa.String(), nullable=False),
+    sa.Column('last_name', sa.String(), nullable=False),
+    sa.Column('username', sa.String(length=50), nullable=False),
+    sa.Column('password', sa.String(length=128), nullable=True),
+    sa.Column('role', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['role'], ['role.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
     op.create_table('schedule',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('user_id', sa.Integer(), nullable=False),
+    sa.Column('employee_id', sa.Integer(), nullable=False),
     sa.Column('event_id', sa.Integer(), nullable=False),
     sa.Column('delivery_date', sa.DateTime(), nullable=False),
     sa.Column('delivery_status', sa.String(), nullable=True),
+    sa.ForeignKeyConstraint(['employee_id'], ['employee.id'], ),
     sa.ForeignKeyConstraint(['event_id'], ['event.id'], ),
-    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###
@@ -67,6 +83,8 @@ def downgrade():
     op.drop_table('schedule')
     op.drop_table('user')
     op.drop_table('position_event')
+    op.drop_table('employee')
+    op.drop_table('role')
     op.drop_table('position_type')
     op.drop_table('event')
     # ### end Alembic commands ###

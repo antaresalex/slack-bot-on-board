@@ -41,13 +41,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
+                    
                     {% for s in schedule %}
+                    <tr>
                         <td>{{ s.event.event_name }}</td>
                         <td>{{ s.delivery_date.strftime('%d.%m.%Y') }}</td>
                         <td>{{ s.delivery_status }}</td>
-                    {% endfor %}
                     </tr>
+                    {% endfor %}
                 </tbody>
             </table>
             <div class="col-1"></div>

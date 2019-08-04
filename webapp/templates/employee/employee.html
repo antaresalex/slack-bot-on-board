@@ -67,12 +67,12 @@
     <div class="row">
         <div class="col-4">
             <h3>Пользователи</h3>
-            {% if users_list %}
+            {% if employees_list %}
             <ul class="list-inline">
-                {% for user in users_list %}
+                {% for employee in employees_list %}
                 <li>
-                    <a href="{{ url_for('user.edit_user', user_id=user.id) }}">{{ user.first_name }} {{ user.last_name }}</a> дата начала: {{ user.start_date }}
-                    <button type="button" class="close" onclick="delete_user({{ user.id }});" aria-label="Close">&times;</button>
+                    <a href="{{ url_for('employee.edit_employee', employee_id=employee.id) }}">{{ employee.first_name }} {{ employee.last_name }}</a> дата начала: {{ employee.start_date }}
+                    <button type="button" class="close" onclick="delete_employee({{ employee.id }});" aria-label="Close">&times;</button>
                 </li>
                 {% endfor %}
             </ul>
@@ -88,8 +88,8 @@
 <script src="{{ url_for('static', filename='js/bootstrap-datepicker.min.js') }}"></script>
 <script src="{{ url_for('static', filename='locales/bootstrap-datepicker.ru.min.js') }}"></script>
 <script>
-function delete_user(index) {
-    $.post("/users/delete_user/" + index, function (data) {
+function delete_employee(index) {
+    $.post("/employees/delete_employee/" + index, function (data) {
         alert(data);
         location.reload();
     });

@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, url_for, redirect, flash
+from flask import Blueprint, flash, redirect, render_template, url_for
 from webapp.html_to_slack import HTMLToSlackMD
 
 from webapp.event.form import EventForm
@@ -30,7 +30,7 @@ def events():
                           positions=positions)
         db.session.add(new_event)
         db.session.commit()
-        flash('Статья успешно добавлена.')
+        flash('Статья "{}" успешно добавлена.'.format(event_name))
         return redirect(url_for('event.events'))
 
     return render_template('event/event.html',
@@ -67,4 +67,4 @@ def delete_user(event_id):
     event = Event.query.get_or_404(event_id)
     db.session.delete(event)
     db.session.commit()
-    return 'Статья успешно удалена!'
+    return 'Статья "{}" успешно удалена!'.format(event.event_name)

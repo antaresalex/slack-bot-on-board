@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-4">
+        <h3>{{ title }}</h3>
+        {% from "_formhelpers.html" import render_field %}
+        <form method="post">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ render_field(form.position_name) }}
+            </div>
+            {{ render_field(form.submit) }}
+        </form>
+    </div>
+</div>
+<div class="row">
+    <div class="col-4">
+        <h3>Позиции</h3>
+        {% if position_list %}
+        <ul class="list-inline">
+        {% for position in position_list %}
+            <li>
+                {{ position.position_name }}
+            </li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

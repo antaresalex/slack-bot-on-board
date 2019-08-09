@@ -1,8 +1,9 @@
-from flask import Flask, render_template
-from flask_login import LoginManager, login_required
+from flask import Flask, render_template, redirect, request, url_for
+from flask_login import LoginManager, current_user
 from flask_migrate import Migrate
 
 from webapp.model import db, User
+from webapp.admin.view import blueprint as admin_blueprint
 from webapp.employee.view import blueprint as employee_blueprint
 from webapp.event.view import blueprint as event_blueprint
 from webapp.user.view import blueprint as user_blueprint
@@ -18,6 +19,7 @@ def create_app():
     login_manager.init_app(app)
     login_manager.login_view = 'user.login'
 
+    app.register_blueprint(admin_blueprint)
     app.register_blueprint(employee_blueprint)
     app.register_blueprint(event_blueprint)
     app.register_blueprint(user_blueprint)
@@ -26,8 +28,12 @@ def create_app():
     def load_manager(user_id):
         return User.query.get(user_id)
 
+    @app.before_request
+    def before_request():
+        if current_user.is_anonymous and (request.endpoint != 'user.login'):
+            return redirect(url_for('user.login'))
+
     @app.route('/')
-    @login_required
     def index():
         title = 'Главная страница'
         hello_text = 'Hello, world!'

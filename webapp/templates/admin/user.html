@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-4">
+        <h3>{{ title }}</h3>
+        {% from "_formhelpers.html" import render_field %}
+        <form method="post">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ render_field(form.first_name) }}
+            </div>
+            <div class="form-group">
+                {{ render_field(form.last_name) }}
+            </div>
+            <div class="form-group">
+                {{ render_field(form.role) }}
+            </div>
+            <div class="form-group">
+                {{ render_field(form.username) }}
+            </div>
+            <div class="form-group">
+                {{ render_field(form.password) }}
+            </div>
+            <div class="form-group">
+                {{ render_field(form.confirm) }}
+            </div>
+            {{ render_field(form.submit) }}
+        </form>
+    </div>
+</div>
+<div class="row">
+    <div class="col-4">
+        <h3>Позиции</h3>
+        {% if users_list %}
+        <ul class="list-inline">
+        {% for user in users_list %}
+            <li>
+                {{ user.first_name }} {{ user.last_name }} {{ user.username }} {{ user.role_type.name }}
+            </li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

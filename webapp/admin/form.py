@@ -1,27 +1,19 @@
 from flask_wtf import FlaskForm
-
-from wtforms import StringField, PasswordField, SubmitField
+from wtforms import PasswordField, SelectField, StringField, SubmitField
 from wtforms.validators import DataRequired, EqualTo, Length
 
 
-class LoginForm(FlaskForm):
-    username = StringField('Имя пользователя',
-                           validators=[DataRequired()],
-                           render_kw={"class": "form-control"})
-    password = PasswordField('Пароль',
-                             validators=[DataRequired()],
-                             render_kw={"class": "form-control"})
-    submit = SubmitField('Войти',
-                         render_kw={"class": "btn btn-primary"})
-
-
-class EditUserForm(FlaskForm):
+class UserForm(FlaskForm):
     first_name = StringField('Имя',
                              validators=[DataRequired()],
                              render_kw={"class": "form-control"})
     last_name = StringField('Фамилия',
                             validators=[DataRequired()],
                             render_kw={"class": "form-control"})
+    role = SelectField('Ролья пользователя',
+                       choices=[],
+                       coerce=int,
+                       render_kw={"class": "form-control"})
     username = StringField('Имя пользователя',
                            validators=[DataRequired()],
                            render_kw={"class": "form-control"})
@@ -32,5 +24,13 @@ class EditUserForm(FlaskForm):
                              render_kw={"class": "form-control"})
     confirm = PasswordField('Повторите пароль',
                             render_kw={"class": "form-control"})
+    submit = SubmitField('Сохранить',
+                         render_kw={"class": "btn btn-primary"})
+
+
+class PositionForm(FlaskForm):
+    position_name = StringField('Наименование позиции',
+                                validators=[DataRequired()],
+                                render_kw={"class": "form-control"})
     submit = SubmitField('Сохранить',
                          render_kw={"class": "btn btn-primary"})

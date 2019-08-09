@@ -16,7 +16,6 @@ def employees():
     employees_list = Employee.query.all()
 
     if form.validate_on_submit():
-        print(1)
         first_name = form.first_name.data
         last_name = form.last_name.data
         slack_id = form.slack_id.data
@@ -57,7 +56,7 @@ def employees():
 @blueprint.route('/<int:employee_id>', methods=['GET', 'POST'])
 def edit_employee(employee_id):
     employee = Employee.query.get_or_404(employee_id)
-    title = 'Пользователь: {firstname} {lastname}'.format(
+    title = 'Сотрудник: {firstname} {lastname}'.format(
         firstname=employee.first_name, lastname=employee.last_name)
     form = EmployeeForm(obj=employee)
     form.position_type.choices = [
@@ -67,7 +66,7 @@ def edit_employee(employee_id):
     if form.validate_on_submit():
         form.populate_obj(employee)
         db.session.commit()
-        flash('Пользователь {firstname} {lastname} успешно обновлен.'.format(
+        flash('Сотрудник {firstname} {lastname} успешно обновлен.'.format(
             firstname=employee.first_name, lastname=employee.last_name))
         return redirect(url_for('employee.employees'))
 
